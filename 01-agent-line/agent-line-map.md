@@ -10,12 +10,14 @@ List every discrete decision or action in your agent's workflow, then score each
 
 | Decision / action | Reversibility (H/M/L) | Blast radius (H/M/L) | Measurability (H/M/L) | Above / Below | HITL? |
 |---|---|---|---|---|---|
-| _Pull project state + recent GitHub/Jira activity_ | H | L | H | Below | · |
-| _Draft the weekly leadership status update_ | H | M | M | Below | spot-check |
-| _Propose next sprint's stories from the PRD (within cap)_ | M | M | M | Below | spot-check |
-| _Post the update to a channel / commit a ship date_ | L | H | M | Above | required |
-| _Mark a launch gate green / merge or close a ticket_ | L | H | M | Above | required |
-| _…_ | | | | | |
+| Pull project state + activity | H | L | H | Below | · |
+| Decide relevant context | M | M | M | Above | · |
+| Draft the update | H | L | M | Below | · |
+| Decide tone/commitment level | L | H | L | Above | · |
+| Flag at-risk/escalation | H | L | H | Below | · |
+| Choose what to escalate | M | M | L | Below | · |
+| Propose a story batch (capped) | H | L | H | Below | · |
+| Post an update / approve a company-wide one | L | H | H | Above | · |
 
 ## Agent anatomy (sketch)
 
@@ -28,8 +30,8 @@ List every discrete decision or action in your agent's workflow, then score each
 
 ## The golden rule, applied
 
-_One sentence per above-the-line decision: why it stays human (which of reversibility / blast radius / measurability failed)._
+_One sentence per above-the-line decision: why it stays human (which of reversibility / blast radius / measurability failed). Pending Step 3._
 
 ## Hardest call
 
-_Your toughest "above vs below" decision and how you resolved it. (Share this in `#cohort-channel`.)_
+_Your toughest "above vs below" decision and how you resolved it. Pending Step 4. (Share this in `#cohort-channel`.)_
