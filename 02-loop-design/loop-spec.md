@@ -26,7 +26,7 @@ A run is done the moment the drafted status update, and any proposed stories, ar
 | Condition | What it looks like | What happens |
 |---|---|---|
 | **Success** | The critic passes the draft | Stop at the HITL checkpoint, update + stories queued, nothing posted |
-| **Stuck / give up** | A required data fetch fails on 2 separate attempts/paths, **or** the critic rejects the draft more than 3 times | Halt, log the reason, escalate to a human instead of looping |
+| **Stuck / give up** | A required data fetch fails on 2 separate attempts/paths, **or** the critic rejects the draft more than 2 times | Halt, log the reason (quoting the critic's last rejection reasons), escalate to a human instead of looping |
 | **Escalate to human** | A risk emerges that conflicts with a committed date (e.g. a blocker reported by email) · the draft implies a public commitment · a proposed story requires something not currently available (e.g. new headcount/resource) | Held at the HITL checkpoint for human review, same as success, but flagged with why |
 
 ## 4. State
