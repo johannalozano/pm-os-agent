@@ -70,6 +70,42 @@ get_activity({project_id: P-NORTH}) -> PRs #812, #815 merged; issue #818 OPEN (n
 
 Fail-action per our orchestration map: revise (up to 2 attempts), then escalate quoting the critic's last rejection reasons.
 
+### M4 — grounded run vs. withheld-source run (post data-pack ingest)
+
+*Caption: ran Cortex twice on the refreshed week-of-2026-07-06 data pack. State (a): a happy-path run grounded entirely in the newly ingested fixtures, activation 43% (up from 41%), real PR numbers, nothing invented. State (b): a missing-data run for a project that doesn't exist, proving Cortex refuses to fabricate and escalates instead.*
+
+**State (a) — grounded answer, citation table**
+
+Every claim in the fresh draft traced to an exact tool call on the ingested data:
+
+| Claim in draft | Source |
+|---|---|
+| Activation rate 43% (up from 41%) | `get_activity({project_id: P-NORTH})` |
+| PRs #820, #823, #442 merged | `get_activity({project_id: P-NORTH})` |
+| Issue #818 closed by #823 | `get_activity({project_id: P-NORTH})` |
+| Sev-1 #440 still open | `get_activity({project_id: P-NORTH})` |
+| Tone / precedent for the update | `search_past_updates` |
+| Roadmap status, confidential items excluded | `get_roadmap` (Orbit + Pulsar correctly withheld) |
+| Queue cap / norms respected | `get_norms` |
+
+**State (b) — withheld-source run, `python agent.py missing-data` (project P-HALO, does not exist)**
+
+```
+get_project({project_id: P-HALO}) -> project_not_found
+get_activity({project_id: P-HALO}) -> project_not_found
+search_past_updates(...) -> no match for P-HALO
+```
+
+Cortex output:
+```
+ESCALATE: I tried a second path via search_past_updates after get_project and
+get_activity both returned project_not_found for P-HALO, no match found. I cannot
+confirm this project exists in our data, so I am not drafting an update or
+committing to a GA date without human sign-off, per team norms.
+```
+
+Critic verdict: **pass** — 7 reasons confirming no invented data, no leak of the now-two confidential items (Orbit, Pulsar), and correct escalation after trying a genuinely second, different lookup path.
+
 ## How to run it
 
 _Minimal steps for someone to reproduce the demo (env vars, and the command or the coding-agent prompt you used)._
