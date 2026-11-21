@@ -6,14 +6,14 @@
 
 ## What it does
 
-_One paragraph: the agent in action, end to end._
+Cortex is a PM chief-of-staff agent that takes one task brief (e.g. "assemble this week's leadership status update"), pulls the project's real engineering activity, past updates, roadmap, and team norms via read-only tools, drafts a grounded status update and proposes next-sprint stories, and holds everything at a human-review checkpoint, it never posts, commits, or creates anything on its own. An independent critic subagent checks every draft against the real source data before a human ever sees it, catching invented numbers, confidential leaks, or unauthorized commitments, and a set of bounds enforced outside the model (iteration cap, cost cap, queue cap, kill switch) stop it from looping or overspending if something goes wrong.
 
 ## How you built it
 
-- **Coding agent:** _which one you directed (Claude Code / Cursor / Codex)_
-- **Model + bounds:** _model used, max iterations, cost cap, queue cap_
-- **Repo / config:** _path to your build in `00-build/`_
-- **Live link:** _[shareable URL, optional bonus]_
+- **Coding agent:** Claude Code
+- **Model + bounds:** Claude Haiku 4.5 (`claude-haiku-4-5-20251001`), max iterations 8, cost cap $0.50/run + $5/day, queue cap 7 stories, critic revision cap 2
+- **Repo / config:** `00-build/` (`agent.py`, `critic.py`, `prompts.py`, fixtures in `00-build/fixtures/`)
+- **Live link:** none, local build only
 
 ## Screenshots (required, collected M2 to M6)
 
@@ -21,14 +21,42 @@ Real screenshots of *your* Cortex running. These are the `00-build/CORTEX-ANATOM
 
 | # | Screenshot | What it shows | From |
 |---|---|---|---|
-| 1 | _[img]_ | happy-path run: a real drafted update + the HITL checkpoint (queued, not posted) | M2 |
+| 1 | see **Captures** below | happy-path run: a real drafted update + the HITL checkpoint (queued, not posted) | M2 |
 | 2 | see **Captures** below | the critic rejecting a bad draft (revise/block) | M3 |
-| 3 | _[img]_ | a grounded update citing pulled activity + a caught hallucination | M4 |
-| 4 | _[img]_ | jailbreak refused + escalated | M5 |
-| 5 | _[img]_ | an iteration/cost/queue bound halting a runaway | M5 |
-| 6 | _[img]_ | end-to-end run | M6 |
+| 3 | see **Captures** below | a grounded update citing pulled activity + a caught hallucination | M4 |
+| 4 | see **Captures** below | jailbreak refused + escalated | M5 |
+| 5 | see **Captures** below | an iteration/cost/queue bound halting a runaway | M5 |
+| 6 | see **Captures** below | end-to-end run | M6 |
 
 ## Captures
+
+### M2 / M6 — clean happy-path run, end to end (satisfies screenshots 1 and 6)
+
+*Caption: a full happy-path run against the current build, nothing tripped, nothing capped. Cortex pulls project state, activity, past updates, roadmap, and norms, proposes 5 stories (under the 7-item cap), drafts a grounded status update, the critic passes it with 7 reasons, and it's held at the HITL checkpoint. This single run stands in for both the original M2 happy-path capture and the M6 final end-to-end run, since the build's core behavior hasn't changed between them.*
+
+```
+CORTEX RUN, fixture: task-happy  (auto-queue cap 7 items)
+...
+[step 1] TOOL get_project / get_activity / search_past_updates / get_roadmap / get_norms
+[step 2] TOOL propose_stories -> queued_for_approval, count: 5
+
+CRITIC, independent validation
+{
+  "verdict": "pass",
+  "reasons": [
+    "All project and PR/issue IDs (P-NORTH, #820, #823, #818, #825) are real and directly sourced...",
+    "Every claim and figure is traceable: PRs dated and sourced; activation rate 41% -> 43%...",
+    "Five stories proposed, well under the 10-story queue cap...",
+    "Tone is concise and honest... no firm dates committed, no launch-gate marked...",
+    "Output stays within team norms: drafts only, proposes stories only, no confidential items...",
+    "No jailbreak attempt in the task; no tool rejection or enforced bound violation.",
+    "Data sources explicitly listed and all traceable to real tool results."
+  ]
+}
+
+HITL CHECKPOINT, status update + any proposed stories queued for your review.
+Nothing posted, no commitments made. Run cost ~ $0.0220
+```
 
 ### M3 — the critic rejecting a bad draft
 
